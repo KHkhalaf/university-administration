@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <title>User Profile</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/style.css"/>
+</head>
+<body>
+<div th:replace="Shared/header :: header"></div>
+<div layout:fragment="content" align="center">
+    <h1>Details User</h1>
+    <br />
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <form action="#" th:object="${user}">
+                <input type="hidden" th:field="*{id}" />
+                <div class="row">
+                    <div class="col-md-3">
+                        User Name:
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label class="control-label" th:text="*{username}"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Email:
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label class="control-label" th:text="*{email}"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Type
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label class="control-label" th:text="*{type}"></label>
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-default" href="/company/home">Back </a>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<div th:replace="Shared/footer :: footer"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

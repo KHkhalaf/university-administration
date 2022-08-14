@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Details Company</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+</head>
+<body>
+<div th:replace="Shared/header :: header"></div>
+<div layout:fragment="content" align="center">
+    <h1>Details Company</h1>
+    <br />
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <form action="#" th:object="${company}">
+                <input type="hidden" th:field="*{id}" />
+                <div class="row">
+                    <div class="col-md-3">
+                        User Name:
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label class="control-label" th:text="*{name}"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Password:
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label class="control-label" th:text="*{location}"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Email:
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label class="control-label" th:text="*{type}"></label>
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-default" href="/company/list">Back </a>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<div th:replace="Shared/footer :: footer"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

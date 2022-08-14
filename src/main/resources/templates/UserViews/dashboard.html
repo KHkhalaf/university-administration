@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>DashBoard</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/js/generateCSV.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="/style.css"/>
+</head>
+<body>
+<div th:replace="Shared/header :: header"></div>
+
+<div>
+    <table hidden class="table table-hover" id="table">
+        <thead class="thead-dark">
+        <tr>
+            <th>voltage</th>
+            <th>ampere</th>
+            <th>catchTime</th>
+            <th>id</th>
+            <th>username</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="item" th:each="d : ${datasets}">
+            <td class="voltage" th:text="${d.voltage}"></td>
+            <td class="ampere" th:text="${d.ampere}"></td>
+            <td class="catchTime" th:text="${d.catchTime}"></td>
+            <td class="userId" th:text="${d.userId}"></td>
+            <td class="username" th:text="${d.username}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="row"> 
+    <div class="col-md-3" style="margin-left: 30px; margin-top: 10px">
+        <div class="form-group">
+            <input id="ampereIndicator" type="number" class="form-control" placeholder="ampere indicator" value="40"/>
+        </div>
+        <div class="form-group">
+            <select id="timeOut" class="form-control">
+                <option value="5000" selected style="display:none">select timeOut</option>
+                <option value="1000">1</option>
+                <option value="2000">3</option>
+                <option value="5000">5</option>
+                <option value="10000">10</option>
+            </select>
+        </div> 
+    </div>  
+    <div class="col-md-6">
+        <canvas id="myChart" hidden style="width:100%;max-width:700px;height:400px;"></canvas>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <button class="gen_btn form-control btn btn-success">Generate CSV File</button>
+        </div>
+    </div>
+</div>
+<script>
+
+
+      var v = [];
+      var a = [];
+      var cd = [];
+      var i =0;
+      offset = 5;
+      var t = document.getElementById('table');
+      var id = $(t.rows[1].cells[3]).text();
+      var username = $(t.rows[1].cells[4]).text();
+
+      $("#table tr").each(function() {
+          var val1 = $(t.rows[i].cells[0]).text();
+          var val2 = $(t.rows[i].cells[1]).text();
+          var val3 = $(t.rows[i].cells[2]).text();
+
+          v.push(val1)
+          a.push(val2)
+          cd.push(val3)
+          i++;
+      });
+      v.shift()
+      a.shift()
+      cd.shift()
+
+
+      createChart(a, v, cd);
+
+(function worker() {
+  $.ajax({
+    url: 'http://localhost:8081/user/dashboardJSON/'+id+'/'+offset,
+    success: function(data) {
+      a = [];
+      v = [];
+      cd = [];
+      for (let item of data) {
+          if(item.ampere > $('#ampereIndicator').val())
+            alert('theere va amplue has reached more 40 !!!' );
+          a.push(item.ampere);
+          v.push(item.voltage);
+          cd.push(item.catchTime);
+      }
+      createChart(a, v, cd);
+      offset += 5;
+    },
+    complete: function() {
+      setTimeout(worker, $('#timeOut').val());
+    }
+  });
+})();
+
+function createChart(v , a, cd){
+    new Chart(document.getElementById("myChart"), {
+        type: "line",
+        data: {
+            labels: cd,
+            datasets: [{
+                label: 'voltage',
+                data: v,
+                borderColor: "red",
+                fill: false
+            }, {
+                label: 'ampere',
+                data: a,
+                borderColor: "green",
+                fill: false
+            } ]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+                yAxes: [{ticks: {min: 1, max:100}}],
+            }
+        }
+    });
+}
+
+
+</script>
+
+
+<div class="footer-dark">
+    <footer layout:fragment="footer" xmlns:layout="http://www.w3.org/1999/xhtml">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-md-3 item">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Web design</a></li>
+                        <li><a href="#">Development</a></li>
+                        <li><a href="#">Hosting</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-6 col-md-3 item">
+                    <h3>About</h3>
+                    <ul>
+                        <li><a href="#">Company</a></li>
+                        <li><a href="#">Team</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6 item text">
+                    <h3>Public Sector Agencies</h3>
+                    <p>The experience has been very good, it's easy to use and the customer support has probably been one of the best I have dealt with.</p>
+                </div>
+                <div class="col item social"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-instagram"></i></a></div>
+            </div>
+            <p class="copyright">All Rights Reserved. &copy; 2022 @EMS</p>
+        </div>
+    </footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

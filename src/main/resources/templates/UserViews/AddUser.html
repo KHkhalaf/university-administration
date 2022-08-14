@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.w3.org/1999/xhtml" 
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="utf-8" />
+    <title>Add User</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+</head>
+<body>
+<div th:replace="Shared/header :: header"></div>
+<div layout:fragment="content" align="center">
+    <h1>Add User</h1>
+    <br />
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <form action="#" th:action="@{/auth/registerUser}" th:object="${userDto}"
+                  method="post">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label">User Name:</label>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <input type="text" class="form-control" th:field="*{username}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label"> Password:</label>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <input type="password" class="form-control" th:field="*{password}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label"> Email:</label>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <input type="email" class="form-control" th:field="*{email}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" sec:authorize="hasAuthority('SUPERADMIN')">
+                    <div class="col-md-3">
+                        <label class="control-label">User type:</label>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <select id="type" th:field="*{type}" class="form-control">
+                                <option value="USER">USER</option>
+                                <option value="ADMIN">ADMIN</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label">Company:</label>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <select th:field="*{companyId}" class="form-control">
+                                <option th:each="company : ${companies}"
+                                        th:value="${company.id}"
+                                        th:text="${company.name}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary"> Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+<div th:replace="Shared/footer :: footer"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
