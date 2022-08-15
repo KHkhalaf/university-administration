@@ -10,8 +10,8 @@ import java.util.Properties;
 public class EmailSenderService {
 
     public void sendEmail(String confirmationToken, String sendTo) {
-        final String username = "khalilkhalaf404@gmail.com";
-        final String password = "Asasasas";
+        final String username = "myEmail@gmail.com";
+        final String password = "1234";
 
         Properties props = new Properties();
         props.put("mail.smtp.starttls.enable", "true");
